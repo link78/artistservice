@@ -1,0 +1,5 @@
+﻿{
+  "Data": {
+    "Connection": "Server=(localdb)\\MSSQLLocalDB;Database=ArtistData;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
