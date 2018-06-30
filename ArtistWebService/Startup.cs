@@ -14,17 +14,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using DataAccessLayer;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ArtistWebService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment _env)
         {
             Configuration = configuration;
+            env = _env;
         }
 
         public IConfiguration Configuration { get; }
+
+        private readonly IHostingEnvironment env;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,7 +42,14 @@ namespace ArtistWebService
 
 
             services.AddAutoMapper();
-            services.AddMvc();
+            services.AddMvc(option =>
+            {
+                if (!env.IsProduction())
+                {
+                    option.SslPort = 44370;
+                }
+                option.Filters.Add(new RequireHttpsAttribute());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,7 +7,7 @@ namespace ArtistWebService.Data
         public Guid Id { get; set; }
         public string FullName { get; set; }
         public string ArtistName { get; set; }
-        public string ContactName { get; set; }
+       
         public string ContactEmail { get; set; }
         public string ContactPhone { get; set; }
         public string ContactTweeter { get; set; }
