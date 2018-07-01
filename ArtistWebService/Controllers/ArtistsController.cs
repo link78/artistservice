@@ -8,11 +8,15 @@ using AutoMapper;
 using ArtistWebService.Data;
 using DataAccessLayer.Entities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ArtistWebService.Controllers
 {
+   // [Authorize]
+    [EnableCors("public")]
     [Route("api/artists")]
     public class ArtistsController : Controller
     {
@@ -26,13 +30,14 @@ namespace ArtistWebService.Controllers
             mapper = _mapper;
            
         }
-        // GET: /<controller>/
+        [EnableCors("limAdmin")]
         public IActionResult GetArtist()
         {
             var model = service.GetArtists();
             return Ok(mapper.Map<IEnumerable<ArtistDto>>(model));
         }
 
+        [EnableCors("limAdmin")]
         [HttpGet("{id}", Name ="GetArtist")]
         public IActionResult Get(Guid id, bool included= false)
         {
@@ -56,6 +61,7 @@ namespace ArtistWebService.Controllers
             return BadRequest();
         }
 
+        [EnableCors("limAdmin")]
         [HttpPost]
         public async Task<IActionResult>Create([FromBody] Artist artist)
         {
@@ -78,6 +84,8 @@ namespace ArtistWebService.Controllers
 
             return BadRequest("Error occur while creating new artist");
         }
+
+        [EnableCors("limAdmin")]
         [HttpPut("{id}")]
         public async Task<IActionResult>Update(Guid id, [FromBody] Artist model)
         {
@@ -109,6 +117,8 @@ namespace ArtistWebService.Controllers
             return BadRequest();
         }
 
+
+        [EnableCors("limAdmin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult>Delete(Guid id)
         {
