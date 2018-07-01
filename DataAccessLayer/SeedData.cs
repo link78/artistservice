@@ -75,57 +75,7 @@ namespace DataAccessLayer
             context.SaveChanges();
         }
 
-        public async static void SeedUser(IServiceProvider provider)
-        {
-            var context = provider.GetRequiredService<DataContext>();
-            var userManager = provider.GetRequiredService<UserManager<AppUser>>();
-            var roleManger = provider.GetRequiredService<RoleManager<IdentityRole>>();
-
-
-            if (context.Users.Any())
-            {
-                var admin = new AppUser
-                {
-                    SecurityStamp = Guid.NewGuid().ToString(),
-                    UserName = "Admin",
-                    Email = "adminKade@me.com",
-                    FirstName = "Adams",
-                    IsSuperUser= true,
-                    LastName = "Rice",
-                    CreatedAt = DateTime.Now
-                };
-
-                if(!await roleManger.RoleExistsAsync("Administrator"))
-                {
-                    await roleManger.CreateAsync(new IdentityRole("Administrator"));
-                }
-                if(await userManager.FindByNameAsync(admin.UserName)== null)
-                {
-                    await userManager.CreateAsync(admin, "Pass4Admin$$");
-                    await userManager.AddToRoleAsync(admin, "Administrator");
-                    admin.EmailConfirmed = true;
-                    admin.LockoutEnabled = false;
-                }
-
-
-                var user = new AppUser()
-                {
-                    SecurityStamp = Guid.NewGuid().ToString(),
-                    UserName = "Admin",
-                    Email = "Aline@me.com",
-                    FirstName = "Alice",
-                    IsSuperUser = false,
-                    LastName = "Fry",
-                    CreatedAt = DateTime.Now
-                };
-
-                var userResult = await userManager.CreateAsync(user, "Pass4Aline$$");
-                var roleResult = await userManager.AddToRoleAsync(user, "RegisteredUser");
-                if(! userResult.Succeeded || !roleResult.Succeeded)
-                {
-                    throw new InvalidOperationException("Failed to add user and role");
-                }
-            }
-        }
+        
+        
     }
 }

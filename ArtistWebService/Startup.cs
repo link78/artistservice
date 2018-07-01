@@ -36,8 +36,8 @@ namespace ArtistWebService
             services.AddSingleton(Configuration);
             services.AddTransient<IWebService, WebService>();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["Data:Connection"]));
-
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            services.AddDbContext<IdentityContext>(options => options.UseSqlServer(Configuration["Data:IConnection"]));
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
 
 
 
@@ -60,17 +60,17 @@ namespace ArtistWebService
             {
                 app.UseDeveloperExceptionPage();
             }
-            SeedData.SeedUser(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
+           
             app.UseAuthentication();
             app.UseStaticFiles();
             context.Seed();
 
-           
 
-
-
+           SeedIdentity.SeedUser(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
 
             app.UseMvc();
+
+            
         }
     }
 }

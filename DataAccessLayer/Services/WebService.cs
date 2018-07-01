@@ -41,7 +41,7 @@ namespace DataAccessLayer.Services
             return context
                 .Albums
                 .Include(a => a.Artist)
-                .Where(a => a.Id == id)
+                .Where(a => a.Artist.Id == id)
                 .OrderBy(a => a.Name).ToList();
         }
 
