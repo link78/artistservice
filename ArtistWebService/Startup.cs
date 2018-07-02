@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.Swagger;
+using ArtistWebService.RepoService;
 
 namespace ArtistWebService
 {
@@ -40,6 +41,7 @@ namespace ArtistWebService
         {
             services.AddSingleton(Configuration);
             services.AddTransient<IWebService, WebService>();
+            services.AddTransient<IArtistRepo, ArtistRepo>();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["Data:Connection"]));
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(Configuration["Data:IConnection"]));
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
@@ -126,7 +128,11 @@ namespace ArtistWebService
                     option.SslPort = 44370;
                 }
                 option.Filters.Add(new RequireHttpsAttribute());
-            });
+            })
+            .AddJsonOptions(opt=>
+            
+                opt.SerializerSettings.ReferenceLoopHandling= Newtonsoft.Json.ReferenceLoopHandling.Serialize
+            );
 
 
             services.AddSwaggerGen(c =>
@@ -165,7 +171,7 @@ namespace ArtistWebService
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1", "Artists web service");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json","Artists web service");
             });
         }
     }

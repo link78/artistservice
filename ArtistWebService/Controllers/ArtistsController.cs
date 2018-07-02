@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace ArtistWebService.Controllers
 {
-   // [Authorize]
+    //[Authorize]
     [EnableCors("public")]
     [Route("api/artists")]
     public class ArtistsController : Controller

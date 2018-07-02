@@ -36,33 +36,7 @@ namespace ArtistWebService.Controllers
         }
 
         
-        [HttpPost("api/auth/login")] 
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
-        {
-            var result = await signIn.PasswordSignInAsync(model.UserName, model.Password, false, false);
-            if (result.Succeeded)
-            {
-                return Ok("Successful login");
-            }
-
-            return BadRequest("Failed to login");
-        }
-
-        [HttpPost("api/auth/register")]
-        public async Task<IActionResult> Register([FromBody] CredentialModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new AppUser { UserName = model.UserName, Email = model.Email, IsSuperUser= model.IsSuperUser };
-                var result = await userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    return Ok($"Successful: User:{user} has been created ");
-                }
-            }
-
-            return BadRequest("Failed to login");
-        }
+       
 
 
 
